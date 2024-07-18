@@ -22,7 +22,7 @@ app.get('/search/country', async (req, res) => {
       return res.status(404).json({ error: 'Country not found' });
     }
 
-    // Log the entered country and its coordinates
+    
     console.log(`Entered Country: ${name}`);
     console.log(`Latitude: ${country.lat}`);
     console.log(`Longitude: ${country.lon}`);
