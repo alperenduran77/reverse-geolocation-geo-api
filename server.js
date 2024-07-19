@@ -12,6 +12,6 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
   .catch(err => console.log(err));
 
 app.use('/countries', countryRoutes);
-app.use('/search/country', searchRoutes);
+app.use('/search', searchRoutes); // Updated line
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
