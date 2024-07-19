@@ -15,4 +15,19 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Route to get a country by ID
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const country = await Country.findById(id);
+    if (!country) {
+      return res.status(404).json({ error: 'Country not found' });
+    }
+    res.json(country);
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;
