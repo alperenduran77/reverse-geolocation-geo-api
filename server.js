@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Country = require('./models/Country');
+const countryRoutes = require('./routes/countries');
+const searchRoutes = require('./routes/search');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,27 +11,7 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
-app.get('/search/country', async (req, res) => {
-  const { name } = req.query;
-  if (!name) {
-    return res.status(400).json({ error: 'Country name is required' });
-  }
-
-  try {
-    const country = await Country.findOne({ name });
-    if (!country) {
-      return res.status(404).json({ error: 'Country not found' });
-    }
-
-    
-    console.log(`Entered Country: ${name}`);
-    console.log(`Latitude: ${country.lat}`);
-    console.log(`Longitude: ${country.lon}`);
-
-    res.json({ lat: country.lat, lon: country.lon });
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
+app.use('/countries', countryRoutes);
+app.use('/search/country', searchRoutes);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
