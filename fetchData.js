@@ -1,8 +1,8 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
-const Country = require('../models/Country');
-const State = require('../models/State');
-const City = require('../models/City');
+const Country = require('./models/Country');
+const State = require('./models/State');
+const City = require('./models/City');
 
 const importData = async () => {
   try {

@@ -1,52 +1,32 @@
 const mongoose = require('mongoose');
 
-const stateSchema = new mongoose.Schema({
-  id: Number,
-  name: String,
-  state_code: String,
-  latitude: String,
-  longitude: String,
-  type: String,
-  cities: [
-    {
-      id: Number,
-      name: String,
-      latitude: String,
-      longitude: String
-    }
-  ]
-});
-
 const countrySchema = new mongoose.Schema({
-  id: Number,
-  name: String,
-  iso3: String,
-  iso2: String,
-  numeric_code: String,
-  phone_code: String,
-  capital: String,
-  currency: String,
-  currency_name: String,
-  currency_symbol: String,
-  tld: String,
-  native: String,
-  region: String,
-  region_id: String,
-  subregion: String,
-  subregion_id: String,
-  nationality: String,
-  timezones: [
-    {
-      zoneName: String,
-      gmtOffset: Number,
-      gmtOffsetName: String,
-      abbreviation: String,
-      tzName: String
-    }
-  ],
+  name: { type: String, required: true },
+  iso3: { type: String, required: true },
+  iso2: { type: String, required: true },
+  numeric_code: { type: String, required: true },
+  phone_code: { type: String, required: true },
+  capital: { type: String, required: true },
+  currency: { type: String, required: true },
+  currency_name: { type: String, required: true },
+  currency_symbol: { type: String, required: true },
+  tld: { type: String, required: true },
+  native: { type: String, required: true },
+  region: { type: String, required: true },
+  region_id: { type: String, required: true },
+  subregion: { type: String, required: true },
+  subregion_id: { type: String, required: true },
+  nationality: { type: String, required: true },
+  timezones: [{ 
+    zoneName: String, 
+    gmtOffset: Number, 
+    gmtOffsetName: String, 
+    abbreviation: String, 
+    tzName: String 
+  }],
   translations: {
     kr: String,
-    'pt-BR': String,
+    pt_BR: String,
     pt: String,
     nl: String,
     hr: String,
@@ -57,13 +37,12 @@ const countrySchema = new mongoose.Schema({
     ja: String,
     it: String,
     cn: String,
-    tr: String
+    tr: String,
   },
   latitude: String,
   longitude: String,
   emoji: String,
   emojiU: String,
-  states: [stateSchema]
-});
+}, { collection: 'countries' });
 
 module.exports = mongoose.model('Country', countrySchema);
