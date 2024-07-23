@@ -1,108 +1,91 @@
 const express = require('express');
 const router = express.Router();
 const Country = require('../models/Country');
+const State = require('../models/State');
+const City = require('../models/City');
 
-// Route to search country by name
-router.get('/country', async (req, res) => {
-  const { name } = req.query;
-  if (!name) {
-    return res.status(400).json({ error: 'Country name is required' });
-  }
+// Search country by name or latitude and longitude
+router.get('/countries', async (req, res) => {
+    const { name, latitude, longitude } = req.query;
 
-  try {
-    const country = await Country.findOne({ name });
-    if (!country) {
-      return res.status(404).json({ error: 'Country not found' });
+    try {
+        let query = {};
+
+        if (name) {
+            query.name = { $regex: name, $options: 'i' }; // Case-insensitive search
+        }
+
+        if (latitude && longitude) {
+            query.latitude = latitude;
+            query.longitude = longitude;
+        }
+
+        const countries = await Country.find(query);
+
+        if (countries.length === 0) {
+            return res.status(404).json({ message: 'No countries found matching the criteria.' });
+        }
+
+        res.json(countries);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
-
-    console.log(`Entered Country: ${name}`);
-    console.log(`Latitude: ${country.lat}`);
-    console.log(`Longitude: ${country.lon}`);
-
-    res.json({ lat: country.lat, lon: country.lon });
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
 });
 
-// Route to search country by coordinates
-router.get('/coordinatesCountry', async (req, res) => {
-  const { lat, lon } = req.query;
-  if (!lat || !lon) {
-    return res.status(400).json({ error: 'Latitude and longitude are required' });
-  }
+// Search state by name or latitude and longitude
+router.get('/states', async (req, res) => {
+    const { name, latitude, longitude } = req.query;
 
-  try {
-    const latFloat = parseFloat(lat);
-    const lonFloat = parseFloat(lon);
+    try {
+        let query = {};
 
-    const country = await Country.findOne({ lat: latFloat, lon: lonFloat });
-    if (!country) {
-      return res.status(404).json({ error: 'Country not found' });
+        if (name) {
+            query.name = { $regex: name, $options: 'i' }; // Case-insensitive search
+        }
+
+        if (latitude && longitude) {
+            query.latitude = latitude;
+            query.longitude = longitude;
+        }
+
+        const states = await State.find(query);
+
+        if (states.length === 0) {
+            return res.status(404).json({ message: 'No states found matching the criteria.' });
+        }
+
+        res.json(states);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
-
-    console.log(`Latitude: ${lat}`);
-    console.log(`Longitude: ${lon}`);
-    console.log(`Found Country: ${country.name}`);
-
-    res.json(country);
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
 });
 
-const City = require('../models/City'); // Ensure this path is correct
+// Search city by name or latitude and longitude
+router.get('/cities', async (req, res) => {
+    const { name, latitude, longitude } = req.query;
 
-// Route to search city by name
-router.get('/city', async (req, res) => {
-  const { name } = req.query;
-  if (!name) {
-    return res.status(400).json({ error: 'City name is required' });
-  }
+    try {
+        let query = {};
 
-  try {
-    const city = await City.findOne({ name: new RegExp(name, 'i') }); // Case-insensitive search
-    if (!city) {
-      return res.status(404).json({ error: 'City not found' });
+        if (name) {
+            query.name = { $regex: name, $options: 'i' }; // Case-insensitive search
+        }
+
+        if (latitude && longitude) {
+            query.latitude = latitude;
+            query.longitude = longitude;
+        }
+
+        const cities = await City.find(query);
+
+        if (cities.length === 0) {
+            return res.status(404).json({ message: 'No cities found matching the criteria.' });
+        }
+
+        res.json(cities);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
-
-    console.log(`Entered City: ${name}`);
-    console.log(`Latitude: ${city.lat}`);
-    console.log(`Longitude: ${city.lon}`);
-
-    res.json({ name: city.name, lat: city.lat, lon: city.lon });
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
 });
 
-// Route to search city by coordinates
-router.get('/coordinatesCity', async (req, res) => {
-  const { lat, lon } = req.query;
-  if (!lat || !lon) {
-    return res.status(400).json({ error: 'Latitude and longitude are required' });
-  }
-
-  try {
-    const latFloat = parseFloat(lat);
-    const lonFloat = parseFloat(lon);
-
-    if (isNaN(latFloat) || isNaN(lonFloat)) {
-      return res.status(400).json({ error: 'Invalid latitude or longitude' });
-    }
-
-    const city = await City.findOne({ lat: latFloat, lon: lonFloat });
-    if (!city) {
-      return res.status(404).json({ error: 'City not found' });
-    }
-
-    console.log(`Latitude: ${lat}`);
-    console.log(`Longitude: ${lon}`);
-    console.log(`Found City: ${city.name}`);
-
-    res.json({ name: city.name, lat: city.lat, lon: city.lon });
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
 module.exports = router;
