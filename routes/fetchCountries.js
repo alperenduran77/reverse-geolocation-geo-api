@@ -5,53 +5,57 @@ const State = require('../models/State');
 const City = require('../models/City');
 
 const importData = async () => {
-  const data = JSON.parse(fs.readFileSync('./countries+states+cities.json', 'utf-8'));
+  try {
+    const data = JSON.parse(fs.readFileSync('./countries+states+cities.json', 'utf-8'));
 
-  for (const countryData of data) {
-    const states = [];
+    for (const countryData of data) {
+      const states = [];
 
-    for (const stateData of countryData.states) {
-      const cities = [];
+      for (const stateData of countryData.states) {
+        const cities = [];
 
-      for (const cityData of stateData.cities) {
-        const city = new City({
-          name: cityData.name,
-          latitude: cityData.latitude,
-          longitude: cityData.longitude
+        for (const cityData of stateData.cities) {
+          const city = new City({
+            name: cityData.name,
+            latitude: cityData.latitude,
+            longitude: cityData.longitude
+          });
+          await city.save();
+          cities.push(city._id);
+        }
+
+        const state = new State({
+          name: stateData.name,
+          state_code: stateData.state_code,
+          latitude: stateData.latitude,
+          longitude: stateData.longitude,
+          cities: cities
         });
-        await city.save();
-        cities.push(city._id);
+        await state.save();
+        states.push(state._id);
       }
 
-      const state = new State({
-        name: stateData.name,
-        state_code: stateData.state_code,
-        latitude: stateData.latitude,
-        longitude: stateData.longitude,
-        cities: cities
+      const country = new Country({
+        name: countryData.name,
+        iso2: countryData.iso2,
+        iso3: countryData.iso3,
+        phone_code: countryData.phone_code,
+        capital: countryData.capital,
+        currency: countryData.currency,
+        native: countryData.native,
+        region: countryData.region,
+        subregion: countryData.subregion,
+        latitude: countryData.latitude,
+        longitude: countryData.longitude,
+        emoji: countryData.emoji,
+        states: states
       });
-      await state.save();
-      states.push(state._id);
+      await country.save();
     }
-
-    const country = new Country({
-      name: countryData.name,
-      iso2: countryData.iso2,
-      iso3: countryData.iso3,
-      phone_code: countryData.phone_code,
-      capital: countryData.capital,
-      currency: countryData.currency,
-      native: countryData.native,
-      region: countryData.region,
-      subregion: countryData.subregion,
-      latitude: countryData.latitude,
-      longitude: countryData.longitude,
-      emoji: countryData.emoji,
-      states: states
-    });
-    await country.save();
+    console.log('Data imported successfully');
+  } catch (error) {
+    console.error('Error importing data:', error);
   }
-  console.log('Data imported successfully');
 };
 
 mongoose.connect('mongodb://localhost:27017/API_database', {
@@ -59,7 +63,12 @@ mongoose.connect('mongodb://localhost:27017/API_database', {
   useUnifiedTopology: true
 }).then(() => {
   console.log('Connected to MongoDB');
-  importData();
+  importData().then(() => {
+    mongoose.disconnect(); // Disconnect after import completes
+  }).catch((err) => {
+    console.error('Error during import:', err);
+    mongoose.disconnect();
+  });
 }).catch((err) => {
   console.error('Error connecting to MongoDB', err);
 });

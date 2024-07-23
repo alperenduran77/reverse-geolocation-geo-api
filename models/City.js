@@ -1,9 +1,14 @@
+// models/City.js
 const mongoose = require('mongoose');
 
 const citySchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  latitude: { type: String, required: true },
-  longitude: { type: String, required: true }
+  name: String,
+  latitude: String,
+  longitude: String,
+  state_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'State'
+  }
 });
 
 module.exports = mongoose.model('City', citySchema);
