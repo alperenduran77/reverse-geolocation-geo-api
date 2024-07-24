@@ -4,6 +4,92 @@ const Country = require('../models/Country');
 const State = require('../models/State');
 const City = require('../models/City');
 
+// General search by name or latitude and longitude
+// Example queries:
+// http://localhost:3000/search?name=Turkey
+// http://localhost:3000/search?latitude=39.00000000&longitude=35.00000000
+router.get('/', async (req, res) => {
+  const { name, latitude, longitude } = req.query;
+
+  if (!name && (!latitude || !longitude)) {
+    return res.status(400).json({ message: 'Name or latitude and longitude are required.' });
+  }
+
+  try {
+    let query = {};
+
+    if (name) {
+      query.name = { $regex: `^${name}$`, $options: 'i' }; // Case-insensitive exact match
+    }
+
+    if (latitude && longitude) {
+      query.latitude = latitude;
+      query.longitude = longitude;
+    }
+
+    let result = {};
+
+    // Search for a country
+    let country;
+    if (latitude && longitude) {
+      country = await Country.findOne(query, 'name _id');
+    } else if (name) {
+      country = await Country.findOne(query, 'latitude longitude _id');
+    }
+
+    if (country) {
+      result.type = 'Country';
+      result.data = {
+        id: country._id,
+        name: country.name,
+        latitude: country.latitude,
+        longitude: country.longitude,
+      };
+    } else {
+      // Search for a state
+      let state;
+      if (latitude && longitude) {
+        state = await State.findOne(query, 'name _id');
+      } else if (name) {
+        state = await State.findOne(query, 'latitude longitude _id');
+      }
+
+      if (state) {
+        result.type = 'State';
+        result.data = {
+          id: state._id,
+          name: state.name,
+          latitude: state.latitude,
+          longitude: state.longitude,
+        };
+      } else {
+        // Search for a city
+        let city;
+        if (latitude && longitude) {
+          city = await City.findOne(query, 'name _id');
+        } else if (name) {
+          city = await City.findOne(query, 'latitude longitude _id');
+        }
+
+        if (city) {
+          result.type = 'City';
+          result.data = {
+            id: city._id,
+            name: city.name,
+            latitude: city.latitude,
+            longitude: city.longitude,
+          };
+        } else {
+          return res.status(404).json({ message: 'No matching country, state, or city found.' });
+        }
+      }
+    }
+
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 // Search country by name or latitude and longitude
 // http://localhost:3000/search/countries?name=Turkey
 // http://localhost:3000/search/countries?latitude=39.00000000&longitude=35.00000000

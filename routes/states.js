@@ -4,6 +4,7 @@ const Country = require('../models/Country');
 const State = require('../models/State');
 
 // List all states
+// http://localhost:3000/states
 router.get('/', async (req, res) => {
   try {
     const states = await State.find();
