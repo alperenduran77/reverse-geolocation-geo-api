@@ -55,7 +55,7 @@ router.get('/countries', async (req, res) => {
 
 // Search state by name or latitude and longitude
 // http://localhost:3000/search/states?name=Kocaeli
-//http://localhost:3000/search/states?latitude=40.85327040&longitude=29.88152030
+// http://localhost:3000/search/states?latitude=40.85327040&longitude=29.88152030
 router.get('/states', async (req, res) => {
     const { name, latitude, longitude } = req.query;
   

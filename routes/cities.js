@@ -3,7 +3,36 @@ const router = express.Router();
 const City = require('../models/City');
 const State = require('../models/State');
 
+// Get all cities
+// http://localhost:3000/cities
+router.get('/', async (req, res) => {
+  try {
+    const cities = await City.find();
+    res.json(cities);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
+);
+// Get city by ID
+// http://localhost:3000/cities/669f48d748786a4ad3f52632
+  router.get('/:cityId', async (req, res) => {
+     
+    try {
+
+      const   city = await City.findById(req.params.cityId);
+      if (!city) {
+        return res.status(404).json({ message: 'City not found' });
+      }
+      res.json(city);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }  
+  );
+
 // Get all cities by state ID
+// http://localhost:3000/cities/state/669f48d748786a4ad3f52630
 router.get('/state/:stateId', async (req, res) => {
   const { stateId } = req.params;
 
@@ -19,6 +48,7 @@ router.get('/state/:stateId', async (req, res) => {
 });
 
 // Get all cities by state name
+// http://localhost:3000/cities/statename/Kocaeli
 router.get('/statename/:stateName', async (req, res) => {
   const { stateName } = req.params;
 
