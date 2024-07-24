@@ -27,6 +27,21 @@ router.get('/:stateId', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 }
+);
+// Gett state by name
+// http://localhost:3000/states/name/Istanbul
+router.get('/name/:stateName', async (req, res) => {
+  try {
+    const state =
+      await State.findOne({ name: req.params.stateName });
+    if (!state) {
+      return res.status(404).json({ message: 'State not found' });
+    }
+    res.json(state);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
 );  
 
 // List all states for a given country ID
@@ -36,8 +51,9 @@ router.get('/country/:countryId', async (req, res) => {
     const states = await State.find({ country_id: req.params.countryId });
     if (states.length === 0) {
       return res.status(404).json({ message: 'No states found for this country' });
-    }
-    res.json(states);
+    } 
+    const states1 = await State.find({ country_id: req.params.countryId }, 'name id latitude longitude');
+    res.json(states1);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -52,7 +68,7 @@ router.get('/countryname/:countryName', async (req, res) => {
       return res.status(404).json({ message: 'Country not found' });
     }
 
-    const states = await State.find({ country_id: country._id });
+    const states = await State.find({ country_id: country._id }, 'name id latitude longitude');
     if (states.length === 0) {
       return res.status(404).json({ message: 'No states found for this country' });
     }
