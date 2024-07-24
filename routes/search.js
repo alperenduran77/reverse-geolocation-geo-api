@@ -5,87 +5,149 @@ const State = require('../models/State');
 const City = require('../models/City');
 
 // Search country by name or latitude and longitude
+// http://localhost:3000/search/countries?name=Turkey
+// http://localhost:3000/search/countries?latitude=39.00000000&longitude=35.00000000
 router.get('/countries', async (req, res) => {
     const { name, latitude, longitude } = req.query;
-
+  
     try {
-        let query = {};
-
-        if (name) {
-            query.name = { $regex: name, $options: 'i' }; // Case-insensitive search
-        }
-
-        if (latitude && longitude) {
-            query.latitude = latitude;
-            query.longitude = longitude;
-        }
-
-        const countries = await Country.find(query);
-
-        if (countries.length === 0) {
-            return res.status(404).json({ message: 'No countries found matching the criteria.' });
-        }
-
-        res.json(countries);
+      let query = {};
+  
+      if (name) {
+        query.name = { $regex: `^${name}$`, $options: 'i' }; // Case-insensitive exact match
+      }
+  
+      if (latitude && longitude) {
+        query.latitude = latitude;
+        query.longitude = longitude;
+      }
+  
+      let country;
+      if (latitude && longitude) {
+        country = await Country.findOne(query, 'name _id'); // Select only name and _id fields
+      } else if (name) {
+        country = await Country.findOne(query, 'latitude longitude _id'); // Select latitude, longitude, and _id fields
+      }
+  
+      if (!country) {
+        return res.status(404).json({ message: 'No countries found matching the criteria.' });
+      }
+  
+      let result;
+      if (latitude && longitude) {
+        result = {
+          id: country._id,
+          name: country.name
+        };
+      } else if (name) {
+        result = {
+          id: country._id,
+          latitude: country.latitude,
+          longitude: country.longitude
+        };
+      }
+  
+      res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+      res.status(500).json({ message: err.message });
     }
-});
+  });
 
 // Search state by name or latitude and longitude
+// http://localhost:3000/search/states?name=Kocaeli
+//http://localhost:3000/search/states?latitude=40.85327040&longitude=29.88152030
 router.get('/states', async (req, res) => {
     const { name, latitude, longitude } = req.query;
-
+  
     try {
-        let query = {};
-
-        if (name) {
-            query.name = { $regex: name, $options: 'i' }; // Case-insensitive search
-        }
-
-        if (latitude && longitude) {
-            query.latitude = latitude;
-            query.longitude = longitude;
-        }
-
-        const states = await State.find(query);
-
-        if (states.length === 0) {
-            return res.status(404).json({ message: 'No states found matching the criteria.' });
-        }
-
-        res.json(states);
+      let query = {};
+  
+      if (name) {
+        query.name = { $regex: `^${name}$`, $options: 'i' }; // Case-insensitive exact match
+      }
+  
+      if (latitude && longitude) {
+        query.latitude = latitude;
+        query.longitude = longitude;
+      }
+  
+      let state;
+      if (latitude && longitude) {
+        state = await State.findOne(query, 'name _id'); // Select only name and _id fields
+      } else if (name) {
+        state = await State.findOne(query, 'latitude longitude _id'); // Select latitude, longitude, and _id fields
+      }
+  
+      if (!state) {
+        return res.status(404).json({ message: 'No states found matching the criteria.' });
+      }
+  
+      let result;
+      if (latitude && longitude) {
+        result = {
+          id: state._id,
+          name: state.name
+        };
+      } else if (name) {
+        result = {
+          id: state._id,
+          latitude: state.latitude,
+          longitude: state.longitude
+        };
+      }
+  
+      res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+      res.status(500).json({ message: err.message });
     }
-});
+  });
 
 // Search city by name or latitude and longitude
+// http://localhost:3000/search/cities?latitude=40.64574000&longitude=29.90015000
+// http://localhost:3000/search/cities?name=Başiskele
 router.get('/cities', async (req, res) => {
     const { name, latitude, longitude } = req.query;
-
+  
     try {
-        let query = {};
-
-        if (name) {
-            query.name = { $regex: name, $options: 'i' }; // Case-insensitive search
-        }
-
-        if (latitude && longitude) {
-            query.latitude = latitude;
-            query.longitude = longitude;
-        }
-
-        const cities = await City.find(query);
-
-        if (cities.length === 0) {
-            return res.status(404).json({ message: 'No cities found matching the criteria.' });
-        }
-
-        res.json(cities);
+      let query = {};
+  
+      if (name) {
+        query.name = { $regex: `^${name}$`, $options: 'i' }; // Case-insensitive exact match
+      }
+  
+      if (latitude && longitude) {
+        query.latitude = latitude;
+        query.longitude = longitude;
+      }
+  
+      let city;
+      if (latitude && longitude) {
+        city = await City.findOne(query, 'name _id'); // Select only name and _id fields
+      } else if (name) {
+        city = await City.findOne(query, 'latitude longitude _id'); // Select latitude, longitude, and _id fields
+      }
+  
+      if (!city) {
+        return res.status(404).json({ message: 'No cities found matching the criteria.' });
+      }
+  
+      let result;
+      if (latitude && longitude) {
+        result = {
+          id: city._id,
+          name: city.name
+        };
+      } else if (name) {
+        result = {
+          id: city._id,
+          latitude: city.latitude,
+          longitude: city.longitude
+        };
+      }
+  
+      res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+      res.status(500).json({ message: err.message });
     }
-});
-
+  });
 module.exports = router;
