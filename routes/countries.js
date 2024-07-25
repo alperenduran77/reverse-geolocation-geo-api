@@ -9,8 +9,8 @@ const State = require('../models/State');
 // Example: http://localhost:3000/countries?fields=name,latitude,longitude&limit=10&skip=1
 router.get('/', async (req, res) => {
   const fields = req.query.fields ? req.query.fields.split(',').join(' ') : 'name id';
-  const limit = parseInt(req.query.limit) || 0; // Set default limit to 0 which means no limit
-  const skip = parseInt(req.query.skip) || 0; // Set default skip to 0
+  const limit = parseInt(req.query.limit) || 0;
+  const skip = parseInt(req.query.skip) || 0;
 
   try {
     // Populate states if requested
@@ -18,9 +18,28 @@ router.get('/', async (req, res) => {
     if (req.query.fields && req.query.fields.includes('states')) {
       query = query.populate('states', 'name state_code latitude longitude country_id');
     }
-    
     const countries = await query.exec();
     res.json(countries);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+// Get country by name
+// Example: http://localhost:3000/countries/Turkey
+// Example: http://localhost:3000/countries/Turkey?fields=name,capital
+// Example: http://localhost:3000/countries/Turkey?fields=name,latitude,longitude
+router.get('/:countryName', async (req, res) => {
+  const fields = req.query.fields ? req.query.fields.split(',').join(' ') : 'name id';
+  try {
+    let query = Country.findOne({ name: new RegExp('^' + req.params.countryName + '$', 'i') }, fields);
+    if (req.query.fields && req.query.fields.includes('states')) {
+      query = query.populate('states', 'name state_code latitude longitude country_id');
+    }
+    const country = await query.exec();
+    if (!country) {
+      return res.status(404).json({ message: 'Country not found' });
+    }
+    res.json(country);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
