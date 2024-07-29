@@ -14,21 +14,17 @@ router.get('/', async (req, res) => {
   if (!name && (!latitude || !longitude)) {
     return res.status(400).json({ message: 'Name or latitude and longitude are required.' });
   }
-
   try {
     let query = {};
 
     if (name) {
       query.name = { $regex: `^${name}$`, $options: 'i' }; // Case-insensitive exact match
     }
-
     if (latitude && longitude) {
       query.latitude = latitude;
       query.longitude = longitude;
     }
-
     let result = {};
-
     // Search for a country
     let country;
     if (latitude && longitude) {
@@ -36,7 +32,6 @@ router.get('/', async (req, res) => {
     } else if (name) {
       country = await Country.findOne(query, 'latitude longitude _id');
     }
-
     if (country) {
       result.type = 'Country';
       result.data = {
@@ -53,7 +48,6 @@ router.get('/', async (req, res) => {
       } else if (name) {
         state = await State.findOne(query, 'latitude longitude _id');
       }
-
       if (state) {
         result.type = 'State';
         result.data = {

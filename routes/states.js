@@ -29,7 +29,7 @@ router.get('/:stateId', async (req, res) => {
 }
 );
 // Gett state by name
-// http://localhost:3000/states/name/Istanbul
+// http://localhost:3000/states/name/İstanbul
 router.get('/name/:stateName', async (req, res) => {
   try {
     const state =
