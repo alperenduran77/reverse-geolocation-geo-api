@@ -7,18 +7,17 @@ const State = require('../models/State');
 // http://localhost:3000/states
 router.get('/', async (req, res) => {
   try {
-    const states = await State.find();
+    const states = await State.find({}, 'name _id latitude longitude country_id');
     res.json(states);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-}
-);
+});
 // Get state by ID
 // http://localhost:3000/states/669f48d748786a4ad3f52630
 router.get('/:stateId', async (req, res) => {
   try {
-    const state = await State.findById(req.params.stateId);
+    const state = await State.findById(req.params.stateId, 'name _id latitude longitude country_id');
     if (!state) {
       return res.status(404).json({ message: 'State not found' });
     }
@@ -26,23 +25,20 @@ router.get('/:stateId', async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-}
-);
+});
 // Gett state by name
 // http://localhost:3000/states/name/İstanbul
 router.get('/name/:stateName', async (req, res) => {
   try {
-    const state =
-      await State.findOne({ name: req.params.stateName });
+    const state = await State.findOne({ name: req.params.stateName }, 'name _id latitude longitude country_id');
     if (!state) {
       return res.status(404).json({ message: 'State not found' });
     }
     res.json(state);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status500().json({ message: err.message });
   }
-}
-);  
+});
 
 // List all states for a given country ID
 // http://localhost:3000/states/country/669f48af48786a4ad3f258d1
