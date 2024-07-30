@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
     // Search for a country
     let country;
     if (latitude && longitude) {
-      country = await Country.findOne(query, 'name _id latitude longitude');
+      country = await Country.findOne(query, 'name _id');
     } else if (name) {
       country = await Country.findOne(query, 'latitude longitude _id');
     }
@@ -52,7 +52,7 @@ router.get('/', async (req, res) => {
       // Search for a state
       let state;
       if (latitude && longitude) {
-        state = await State.findOne(query, 'name _id latitude longitude');
+        state = await State.findOne(query, 'name _id');
       } else if (name) {
         state = await State.findOne(query, 'latitude longitude _id');
       }
@@ -69,7 +69,7 @@ router.get('/', async (req, res) => {
         // Search for a city
         let city;
         if (latitude && longitude) {
-          city = await City.findOne(query, 'name _id latitude longitude');
+          city = await City.findOne(query, 'name _id');
         } else if (name) {
           city = await City.findOne(query, 'latitude longitude _id');
         }
@@ -116,7 +116,7 @@ router.get('/countries', async (req, res) => {
 
     let country;
     if (latitude && longitude) {
-      country = await Country.findOne(query, 'name _id latitude longitude'); // Select only name and _id fields
+      country = await Country.findOne(query, 'name _id'); // Select only name and _id fields
     } else if (name) {
       country = await Country.findOne(query, 'latitude longitude _id'); // Select latitude, longitude, and _id fields
     }
@@ -160,7 +160,7 @@ router.get('/states', async (req, res) => {
 
     let state;
     if (latitude && longitude) {
-      state = await State.findOne(query, 'name _id latitude longitude'); // Select only name and _id fields
+      state = await State.findOne(query, 'name _id'); // Select only name and _id fields
     } else if (name) {
       state = await State.findOne(query, 'latitude longitude _id'); // Select latitude, longitude, and _id fields
     }
@@ -204,7 +204,7 @@ router.get('/cities', async (req, res) => {
 
     let city;
     if (latitude && longitude) {
-      city = await City.findOne(query, 'name _id latitude longitude'); // Select only name and _id fields
+      city = await City.findOne(query, 'name _id'); // Select only name and _id fields
     } else if (name) {
       city = await City.findOne(query, 'latitude longitude _id'); // Select latitude, longitude, and _id fields
     }
