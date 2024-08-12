@@ -5,7 +5,8 @@ const stateSchema = new mongoose.Schema({
   state_code: { type: String, required: true },
   latitude: String,
   longitude: String,
-  country_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Country', required: true }
+  country_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Country', required: true },
+  cities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'City' }]
 }, { collection: 'states' });
 
 module.exports = mongoose.model('State', stateSchema);

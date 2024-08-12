@@ -5,6 +5,11 @@ const countryRoutes = require('./routes/countries');
 const searchRoutes = require('./routes/search');
 const cityRoutes = require('./routes/cities');
 const stateRoutes = require('./routes/states');
+const geolocationRoutes = require('./routes/geolocation');
+const geofenceRoutes = require('./routes/geofencing');
+const notificationRoutes = require('./routes/notifications');
+const poiRoutes = require('./routes/poi');
+const nearestLocationRoutes = require('./routes/nearestLocation');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +25,12 @@ app.use('/countries', countryRoutes);
 app.use('/search', searchRoutes);
 app.use('/cities', cityRoutes);
 app.use('/states', stateRoutes);
+app.use('/geolocation', geolocationRoutes);
+app.use('/geofence', geofenceRoutes);
+app.use('/notifications', notificationRoutes);
+app.use('/poi', poiRoutes);
+app.use('/nearestLocation',nearestLocationRoutes);
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
