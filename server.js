@@ -15,7 +15,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/API_database';
 
-mongoose.connect(MONGODB_URI, { })
+mongoose.connect(MONGODB_URI, {})
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log('Error connecting to MongoDB:', err));
 
@@ -31,6 +31,10 @@ app.use('/notifications', notificationRoutes);
 app.use('/poi', poiRoutes);
 app.use('/nearestLocation',nearestLocationRoutes);
 
+// Root route to handle GET requests to "/"
+app.get('/', (req, res) => {
+  res.send('Welcome to the Reverse Geolocation API');
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
