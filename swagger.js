@@ -1,27 +1,30 @@
-const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const express = require('express');
-const router = express.Router();
 
-const options = {
-  definition: {
+const swaggerOptions = {
+  swaggerDefinition: {
     openapi: '3.0.0',
     info: {
       title: 'Reverse Geolocation API',
       version: '1.0.0',
-      description: 'API for reverse geolocation and nearby search using Node.js',
+      description: 'API documentation for the Reverse Geolocation service',
     },
     servers: [
       {
         url: 'http://localhost:3000',
+        description: 'Local server',
       },
     ],
   },
   apis: ['./routes/*.js'], // Path to the API docs
 };
 
-const swaggerSpec = swaggerJSDoc(options);
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+const swaggerRouter = express.Router();
 
-module.exports = router;
+swaggerRouter.use('/', swaggerUi.serve);
+swaggerRouter.get('/', swaggerUi.setup(swaggerDocs));
+
+module.exports = swaggerRouter;

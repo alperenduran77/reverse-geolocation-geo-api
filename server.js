@@ -31,7 +31,7 @@ app.use('/geofence', geofenceRoutes);
 app.use('/notifications', notificationRoutes);
 app.use('/poi', poiRoutes);
 app.use('/nearestLocation',nearestLocationRoutes);
-app.use('/', swaggerRouter);
+app.use('/swagger', swaggerRouter);
 
 
 // Root route to handle GET requests to "/"
