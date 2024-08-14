@@ -10,6 +10,7 @@ const geofenceRoutes = require('./routes/geofencing');
 const notificationRoutes = require('./routes/notifications');
 const poiRoutes = require('./routes/poi');
 const nearestLocationRoutes = require('./routes/nearestLocation');
+const swaggerRouter = require('./swagger');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,6 +31,8 @@ app.use('/geofence', geofenceRoutes);
 app.use('/notifications', notificationRoutes);
 app.use('/poi', poiRoutes);
 app.use('/nearestLocation',nearestLocationRoutes);
+app.use('/', swaggerRouter);
+
 
 // Root route to handle GET requests to "/"
 app.get('/', (req, res) => {

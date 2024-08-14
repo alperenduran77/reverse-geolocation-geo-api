@@ -8,6 +8,63 @@ const getCoordinatesFromDB = require('../utils/getCoordinatesFromDB');
 const TOMTOM_API_KEY = process.env.TOMTOM_API_KEY;
 
 // Example: http://localhost:3000/geolocation/route?start=Başiskele&end=Ankara
+/**
+ * @swagger
+ * /geolocation/route:
+ *   get:
+ *     summary: Calculate route between two locations
+ *     description: Retrieve a route between two locations based on their names.
+ *     parameters:
+ *       - in: query
+ *         name: start
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The name of the start location
+ *       - in: query
+ *         name: end
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The name of the end location
+ *     responses:
+ *       200:
+ *         description: A formatted route between the two locations
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 summary:
+ *                   type: string
+ *                   description: Summary of the route
+ *                 distance:
+ *                   type: number
+ *                   description: Distance of the route in meters
+ *                 travelTime:
+ *                   type: number
+ *                   description: Travel time in seconds
+ *                 steps:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       instruction:
+ *                         type: string
+ *                         description: Driving instruction
+ *                       distance:
+ *                         type: number
+ *                         description: Distance of the step in meters
+ *                       duration:
+ *                         type: number
+ *                         description: Duration of the step in seconds
+ *       400:
+ *         description: Start and end locations are required
+ *       404:
+ *         description: No coordinates found for the given location
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/route', async (req, res) => {
   const { start, end } = req.query;
 

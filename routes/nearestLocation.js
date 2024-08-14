@@ -5,6 +5,52 @@ const HaversineFormula = require('../utils/HaversineFormula');
 
 // Find the nearest country, state, and city based on latitude and longitude
 // http://localhost:3000/nearestLocation/nearest-location?latitude=40.7691&longitude=30.1
+/**
+ * @swagger
+ * /nearestLocation/nearest-location:
+ *   get:
+ *     summary: Find the nearest country, state, and city based on latitude and longitude
+ *     description: Returns the nearest country, state, and city to the given latitude and longitude coordinates using the Haversine formula.
+ *     parameters:
+ *       - in: query
+ *         name: latitude
+ *         schema:
+ *           type: number
+ *         required: true
+ *         description: Latitude of the location
+ *       - in: query
+ *         name: longitude
+ *         schema:
+ *           type: number
+ *         required: true
+ *         description: Longitude of the location
+ *     responses:
+ *       200:
+ *         description: Nearest country, state, and city
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 country:
+ *                   type: string
+ *                   example: Turkey
+ *                 state:
+ *                   type: string
+ *                   example: Kocaeli
+ *                 city:
+ *                   type: string
+ *                   example: Izmit
+ *                 distance:
+ *                   type: number
+ *                   example: 5.3
+ *       400:
+ *         description: Latitude and longitude are required
+ *       404:
+ *         description: No locations found
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/nearest-location', async (req, res) => {
     const { latitude, longitude } = req.query;
 

@@ -7,6 +7,54 @@ const TOMTOM_API_KEY = process.env.TOMTOM_API_KEY;
 
 // Get nearby points of interest
 // Example: http://localhost:3000/poi/nearby?latitude=40.7691&longitude=-73.9822
+/**
+ * @swagger
+ * /poi/nearby:
+ *   get:
+ *     summary: Get nearby points of interest
+ *     description: Retrieve a list of nearby points of interest based on the given latitude and longitude.
+ *     parameters:
+ *       - in: query
+ *         name: latitude
+ *         schema:
+ *           type: number
+ *         required: true
+ *         description: Latitude of the location
+ *       - in: query
+ *         name: longitude
+ *         schema:
+ *           type: number
+ *         required: true
+ *         description: Longitude of the location
+ *     responses:
+ *       200:
+ *         description: A list of nearby points of interest
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                     description: Name of the point of interest
+ *                   phone:
+ *                     type: string
+ *                     description: Phone number of the point of interest
+ *                   categories:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                     description: Categories of the point of interest
+ *                   address:
+ *                     type: string
+ *                     description: Address of the point of interest
+ *       400:
+ *         description: Latitude and longitude are required
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/nearby', async (req, res) => {
   const { latitude, longitude } = req.query;
 
