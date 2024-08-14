@@ -12,8 +12,8 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://3.92.222.167:3000',
-        description: 'Local server',
+        url: 'http://3.92.222.167:3000', // Make sure this URL is correct
+        description: 'API server',
       },
     ],
   },
@@ -25,6 +25,6 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 const swaggerRouter = express.Router();
 
 swaggerRouter.use('/', swaggerUi.serve);
-swaggerRouter.get('/', swaggerUi.setup(swaggerDocs));
+swaggerRouter.get('/', swaggerUi.setup(swaggerDocs, { explorer: true }));
 
 module.exports = swaggerRouter;
