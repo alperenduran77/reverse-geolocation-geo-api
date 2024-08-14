@@ -1,6 +1,7 @@
 require('dotenv').config(); // Load environment variables from .env file
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const countryRoutes = require('./routes/countries');
 const searchRoutes = require('./routes/search');
 const cityRoutes = require('./routes/cities');
@@ -20,20 +21,16 @@ mongoose.connect(MONGODB_URI, {})
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log('Error connecting to MongoDB:', err));
 
-  const cors = require('cors');
+// CORS configuration
+const corsOptions = {
+  origin: 'http://3.92.222.167:3000', // Your Swagger UI URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // If needed for authentication
+};
 
-  const cors = require('cors');
+app.use(cors(corsOptions));
 
-  const corsOptions = {
-    origin: 'http://3.92.222.167:3000', // Your Swagger UI URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true, // If needed for authentication
-  };
-  
-  app.use(cors(corsOptions));
-  
-  
 app.use(express.json()); // Middleware to parse JSON
 
 app.use('/countries', countryRoutes);
@@ -44,9 +41,8 @@ app.use('/geolocation', geolocationRoutes);
 app.use('/geofence', geofenceRoutes);
 app.use('/notifications', notificationRoutes);
 app.use('/poi', poiRoutes);
-app.use('/nearestLocation',nearestLocationRoutes);
+app.use('/nearestLocation', nearestLocationRoutes);
 app.use('/swagger', swaggerRouter);
-
 
 // Root route to handle GET requests to "/"
 app.get('/', (req, res) => {
