@@ -20,7 +20,16 @@ mongoose.connect(MONGODB_URI, {})
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log('Error connecting to MongoDB:', err));
 
-app.use(cors());
+  const cors = require('cors');
+
+  const corsOptions = {
+    origin: 'http://3.92.222.167:3000', // Replace with your Swagger UI host if different
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  };
+  
+  app.use(cors(corsOptions));
+  
 app.use(express.json()); // Middleware to parse JSON
 
 app.use('/countries', countryRoutes);
