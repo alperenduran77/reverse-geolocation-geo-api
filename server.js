@@ -20,6 +20,7 @@ mongoose.connect(MONGODB_URI, {})
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log('Error connecting to MongoDB:', err));
 
+app.use(cors());
 app.use(express.json()); // Middleware to parse JSON
 
 app.use('/countries', countryRoutes);
