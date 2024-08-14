@@ -12,7 +12,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://3.92.222.167:3000', // Your public server URL
+        url: 'http://54.164.25.13:3000', // Updated public server URL
         description: 'API server',
       },
     ],

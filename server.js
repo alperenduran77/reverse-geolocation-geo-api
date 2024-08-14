@@ -23,7 +23,7 @@ mongoose.connect(MONGODB_URI, {})
 
 // CORS configuration
 const corsOptions = {
-  origin: 'http://3.92.222.167:3000', // Your Swagger UI URL
+  origin: 'http://54.164.25.13:3000', // Your Swagger UI URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, // If needed for authentication
