@@ -50,7 +50,7 @@ app.use('/swagger', swaggerRouter);
 
 // Root route to handle GET requests to "/"
 app.get('/', (req, res) => {
-  res.send('Welcome to the Reverse Geolocation API');
+  res.send('Welcome to the Reverse Geolocation API service');
 });
 
 // Error handling middleware
