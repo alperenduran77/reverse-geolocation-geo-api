@@ -12,12 +12,12 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://3.92.222.167:3000', // Make sure this URL is correct
+        url: 'http://3.92.222.167:3000', // Your public server URL
         description: 'API server',
       },
     ],
   },
-  apis: ['./routes/*.js'], // Path to the API docs
+  apis: ['./routes/*.js'], // Ensure this path matches your file structure
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
