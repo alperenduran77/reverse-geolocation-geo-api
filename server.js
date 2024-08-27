@@ -1,4 +1,3 @@
-require('dotenv').config(); // Load environment variables from .env file
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -24,7 +23,7 @@ mongoose.connect(MONGODB_URI, {})
 
 // CORS configuration
 const corsOptions = {
-  origin: 'http://54.164.25.13:3000', // Your Swagger UI URL
+  origin: 'http://54.173.178.224:3000', // Swagger UI URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, // If needed for authentication
@@ -45,20 +44,9 @@ app.use('/poi', poiRoutes);
 app.use('/nearestLocation', nearestLocationRoutes);
 app.use('/swagger', swaggerRouter);
 
-// Root route to handle GET requests to "/"
-app.get('/', (req, res) => {
-  res.send('Welcome to the Reverse Geolocation API service');
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
-
 // Redirect HTTP requests from port 80 to Swagger documentation
 app.get('/', (req, res) => {
-  res.redirect('http://54.164.25.13:3000/swagger');
+  res.redirect('http://54.173.178.224:3000/swagger');
 });
 
 // Start the server

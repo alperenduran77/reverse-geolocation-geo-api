@@ -12,13 +12,14 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://54.164.25.13:3000', // Updated public server URL
+        url: 'http://54.173.178.224:3000', // Update with the new IP address
         description: 'API server',
       },
     ],
   },
   apis: ['./routes/*.js'], // Ensure this path matches your file structure
 };
+
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
