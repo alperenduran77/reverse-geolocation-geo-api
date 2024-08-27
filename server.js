@@ -17,6 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/API_database';
 
+// MongoDB connection
 mongoose.connect(MONGODB_URI, {})
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log('Error connecting to MongoDB:', err));
@@ -30,9 +31,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
 app.use(express.json()); // Middleware to parse JSON
 
+// Route configuration
 app.use('/countries', countryRoutes);
 app.use('/search', searchRoutes);
 app.use('/cities', cityRoutes);
@@ -55,4 +56,10 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
+// Redirect HTTP requests from port 80 to Swagger documentation
+app.get('/', (req, res) => {
+  res.redirect('http://54.164.25.13:3000/swagger');
+});
+
+// Start the server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
