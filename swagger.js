@@ -12,7 +12,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://54.173.178.224:3000', // Update with the new IP address
+        url: 'http://54.173.178.224:3000', // Correct URL for Swagger UI
         description: 'API server',
       },
     ],
